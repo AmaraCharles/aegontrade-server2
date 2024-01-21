@@ -8,6 +8,8 @@ var router = express.Router();
 
 router.post("/login", async function (request, response) {
   const { email, password } = request.body;
+
+  /*extra comment
   /**
    * step1: check if a user exists with that email
    * step2: check if the password to the email is correct

@@ -9,14 +9,6 @@ const UsersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  copytrading: {
-    type: String,
-    
-  },
-  condition: {
-    type: String,
-    
-  },
   email: {
     type: String,
     required: true,

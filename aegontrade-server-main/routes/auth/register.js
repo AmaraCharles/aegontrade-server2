@@ -1,5 +1,5 @@
 var express = require("express");
-var { hashPassword,sendPasswordOtp, sendwelcomeEmail,resendWelcomeEmail,resetEmail, sendUserDetails } = require("../../utils");
+var { hashPassword, sendWelcomeEmail,resendWelcomeEmail,resetEmail, sendUserDetails } = require("../../utils");
 const UsersDatabase = require("../../models/User");
 var router = express.Router();
 const { v4: uuidv4 } = require("uuid");
@@ -53,11 +53,9 @@ router.post("/register", async (req, res) => {
       email,
       password: hashPassword(password),
       country,
-      amountDeposited: " You are not eligible to view livestream of ongoing trade.Kindly contact your trader or support.",
+      amountDeposited: 0,
       profit: 0,
       balance: 0,
-      copytrading:0,
-      condition:" ",
       referalBonus: 0,
       transactions: [],
       withdrawals: [],
@@ -98,7 +96,7 @@ router.post("/register", async (req, res) => {
     // Create the new user in the database
     const createdUser = await UsersDatabase.create(newUser);
     const token = uuidv4();
-    sendwelcomeEmail({ to: email, token });
+    sendWelcomeEmail({ to: email, token });
 
     return res.status(200).json({ code: "Ok", data: createdUser });
   } catch (error) {
@@ -279,9 +277,11 @@ router.post("/register/resend", async (req, res) => {
       status: 200,
       message: "OTP resent successfully",
     });
-    
- sendPasswordOtp({to:req.body.email})
-   
+
+    resendWelcomeEmail({
+      to:req.body.email
+    });
+
     // sendUserDetails({
     //   to:req.body.email
     //   });
